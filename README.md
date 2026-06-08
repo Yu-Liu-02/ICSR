@@ -220,6 +220,20 @@ set_g_type("relu")        # Table 2 setting
 
 ## Dependencies
 
-- R packages: `Rcpp`, `RcppArmadillo`, `bayess`, `survival`
-- A C++ compiler accessible to R (e.g. via Xcode CLT on macOS, or `gcc`/`gfortran` on Linux)
-- On macOS with Homebrew GCC, ensure `~/.R/Makevars` points to the correct gfortran library path
+**R packages:** `Rcpp`, `RcppArmadillo`, `bayess`, `survival`
+
+**C++ compiler:** A C++11-compatible compiler is required by `Rcpp`. `RcppArmadillo` additionally requires a Fortran compiler (`gfortran`) because Armadillo links against LAPACK/BLAS.
+
+| Platform | C++ | Fortran |
+|----------|-----|---------|
+| macOS | Clang (via Xcode CLT: `xcode-select --install`) | `gfortran` must be installed separately (`brew install gcc`) |
+| Linux / SLURM cluster | `gcc`/`g++` (load via `module load gcc`) | `gfortran` included with GCC |
+
+**macOS note:** After installing GCC via Homebrew, add the following to `~/.R/Makevars` so R can find the Fortran libraries:
+
+```makefile
+FC=/opt/homebrew/bin/gfortran
+F77=/opt/homebrew/bin/gfortran
+FLIBS=-L/opt/homebrew/opt/gcc/lib/gcc/current -lgfortran -lquadmath -lm
+```
+
