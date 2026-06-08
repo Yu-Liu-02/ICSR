@@ -34,6 +34,81 @@ ICSR/
 
 ---
 
+
+## Reproducing the Simulation Tables
+
+All simulation scripts are self-contained once the working directory is set to the corresponding simulation folder. For Table 1, set the working directory to `simulation/Table1/`. For Table 2, set the working directory to `simulation/Table2/`. Each script generates simulation datasets, fits the corresponding method, and prints a summary table containing bias, empirical standard error, average estimated standard error, and coverage probability.
+
+The simulation scripts are organized by table.
+
+### Table 1: Indicator g, beta = 1
+
+To reproduce Table 1, set the working directory to
+
+```text
+simulation/Table1/
+
+run the scripts in
+
+```text
+simulation/Table1/
+```
+
+The available scripts are
+
+```text
+Proposed.R
+Ahn.R
+Goggins.R
+Midpoint.R
+```
+
+This setting uses the indicator specification
+
+```r
+g(s, t) = 1(s >= t)
+```
+
+with true parameter value `beta = 1`.
+
+### Table 2: ReLU g, beta = 0.1
+
+To reproduce Table 2, set the working directory to
+
+```text
+simulation/Table1/
+
+run the scripts in
+
+```text
+simulation/Table2/
+```
+
+The available scripts are
+
+```text
+Proposed.R
+Midpoint.R
+```
+
+This setting uses the ReLU specification
+
+```r
+g(s, t) = max(s - t, 0)
+```
+
+with true parameter value `beta = 0.1`.
+
+Ahn et al. and Goggins et al. are not included in Table 2 because their methods do not support the ReLU specification of the preclinical effect.
+
+### Random seeds, output, and runtime
+
+Each simulation script sets the simulation setting internally. The scripts print summary tables directly to the R console. If saved output files are desired, the printed summary objects can be redirected or written to file using standard R functions such as `write.csv()` or `saveRDS()`.
+
+Runtime depends on the sample size, the number of simulation replications, and the computing environment. The Goggins method is much more computationally intensive than other methods.
+
+---
+
 ## Proposed Method
 
 ### 1. Setup
