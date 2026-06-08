@@ -12,25 +12,25 @@ ICRC_submission/
 │   ├── data_generate.R        # Data-generating functions
 │   └── g_function.R           # g function (indicator / ReLU)
 ├── Proposed_func/
-│   ├── EM_proposed.cpp        # C++ E-step and M-step kernels
-│   ├── compile_cpp_em.R       # Compiles EM_proposed.cpp via Rcpp
+│   ├── EM_proposed.cpp        # C++ E-step and M-step 
+│   ├── compile_cpp_em.R       # Compiles EM_proposed.cpp 
 │   ├── EM_proposed.R          # E-step, M-step, EM loop
 │   └── variance_estimation.R  # Profile likelihood variance estimation
 ├── Ahn_func/
-│   └── EM_Ahn.R               # Ahn competitor method
+│   └── EM_Ahn.R               # Functions for Ahn method
 ├── Goggins_func/
 │   ├── Gibbs.cpp              # C++ Gibbs sampler
 │   ├── compile_cpp_mcem.R     # Compiles Gibbs.cpp
-│   └── MCEM_Goggins.R         # Goggins competitor method
+│   └── MCEM_Goggins.R         # Functions for Goggins method
 └── simulation/
-    ├── Table1/
-    │   ├── Proposed.R         # Indicator g, beta = 1
+    ├── Table1/                # Indicator g, beta = 1
+    │   ├── Proposed.R         # Proposed method
     │   ├── Ahn.R              # Ahn method
-    │   ├── Goggins.R          # Goggins MCEM
-    │   └── Midpoint.R         # Midpoint imputation, indicator g
-    └── Table2/
-        ├── Proposed.R         # ReLU g, beta = 0.1
-        └── Midpoint.R         # Midpoint imputation, ReLU g
+    │   ├── Goggins.R          # Goggins method
+    │   └── Midpoint.R         # Midpoint imputation
+    └── Table2/                # ReLU g, beta = 0.1
+        ├── Proposed.R         # Proposed method
+        └── Midpoint.R         # Midpoint imputation
 ```
 
 ---
@@ -39,7 +39,7 @@ ICRC_submission/
 
 ### 1. Setup
 
-Source all required files (done automatically in `Proposed.R`):
+Source all required files and load all required packages (done automatically in `Proposed.R`):
 
 ```r
 library(Rcpp)
@@ -48,14 +48,14 @@ library(bayess)
 
 source("data_generation/data_generate.R")
 source("data_generation/g_function.R")
-source("Proposed_func/compile_cpp_em.R")   # compiles C++ on first run
+source("Proposed_func/compile_cpp_em.R")   
 source("Proposed_func/EM_proposed.R")
 source("Proposed_func/variance_estimation.R")
 ```
 
 ### 2. Choose the g function
 
-The model supports two forms of the threshold effect:
+The model supports two forms of the pre-clinical effect:
 
 ```r
 set_g_type("indicator")   # g(s, t) = 1(s >= t)  [default]
@@ -136,7 +136,7 @@ All simulation scripts follow the same structure:
 
 True parameter values: γ = (1, 1.5, −1.5), α = (0.45, 0.5, −0.25), **β = 1**, `g_type = "indicator"`.
 
-**Ahn:** estimates α and β only (Weibull IC model fit separately via `survreg`). Output is `p+1` columns.
+**Ahn:** estimates α and β only (Parametric Weibull model for preclinical event fit separately via `survreg`). Output is `p+1` columns.
 
 **Goggins:** MCEM with a Gibbs sampler (C++ backend in `Gibbs.cpp`). Starting values from a Cox model with midpoint imputation. Output is `p+1` columns (α, β).
 
@@ -151,7 +151,7 @@ True parameter values: γ = (1, 1.5, −1.5), α = (0.45, 0.5, −0.25), **β = 
 
 True parameter values: γ = (1, 1.5, −1.5), α = (0.45, 0.5, −0.25), **β = 0.1**, `g_type = "relu"`.
 
-Ahn and Goggins are not included in Table 2 as they do not support the ReLU g function.
+Ahn and Goggins are not included in Table 2 as their method do not support the ReLU g function.
 
 ### Switching g type in simulations
 
@@ -161,8 +161,6 @@ Ahn and Goggins are not included in Table 2 as they do not support the ReLU g fu
 set_g_type("indicator")   # Table 1 setting
 set_g_type("relu")        # Table 2 setting
 ```
-
-`Ahn.R` and `Goggins.R` do not use `set_g_type()`; they assume a fixed parametric structure for the IC event.
 
 ---
 
