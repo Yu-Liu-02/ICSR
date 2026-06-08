@@ -34,6 +34,48 @@ ICSR/
 
 ---
 
+## Dependencies
+
+### R packages
+
+The required R packages are
+
+```r
+Rcpp
+RcppArmadillo
+bayess
+survival
+```
+
+They can be installed in R by running
+
+```r
+install.packages(c("Rcpp", "RcppArmadillo", "bayess", "survival"))
+```
+
+### C++ and Fortran compilers
+
+The proposed EM algorithm and the Goggins MCEM algorithm use C++ code through `Rcpp`. Therefore, a C++11-compatible compiler is required. Since `RcppArmadillo` is used, a Fortran compiler such as `gfortran` is also required.
+
+| Platform | C++ compiler | Fortran compiler |
+|----------|--------------|------------------|
+| macOS | Clang, available through Xcode Command Line Tools using `xcode-select --install` | `gfortran`, installed separately, for example using `brew install gcc` |
+| Linux or SLURM cluster | `gcc` and `g++`, for example loaded using `module load gcc` | `gfortran`, usually included with GCC |
+
+
+### Compilation
+
+The required C++ files are compiled automatically when running the simulation scripts through the compilation scripts
+
+```r
+compile_cpp_em.R
+compile_cpp_mcem.R
+```
+
+The proposed method uses `compile_cpp_em.R`, and the Goggins MCEM method uses `compile_cpp_mcem.R`. No manual compilation is needed before running the simulation scripts.
+
+---
+
 
 ## Reproducing the Simulation Tables
 
@@ -294,22 +336,5 @@ set_g_type("relu")        # Table 2 setting
 
 ---
 
-## Dependencies
 
-**R packages:** `Rcpp`, `RcppArmadillo`, `bayess`, `survival`
-
-**C++ compiler:** A C++11-compatible compiler is required by `Rcpp`. `RcppArmadillo` additionally requires a Fortran compiler (`gfortran`).
-
-| Platform | C++ | Fortran |
-|----------|-----|---------|
-| macOS | Clang (via Xcode CLT: `xcode-select --install`) | `gfortran` must be installed separately (`brew install gcc`) |
-| Linux / SLURM cluster | `gcc`/`g++` (load via `module load gcc`) | `gfortran` included with GCC |
-
-**macOS note:** After installing GCC via Homebrew, add the following to `~/.R/Makevars` so R can find the Fortran libraries:
-
-```makefile
-FC=/opt/homebrew/bin/gfortran
-F77=/opt/homebrew/bin/gfortran
-FLIBS=-L/opt/homebrew/opt/gcc/lib/gcc/current -lgfortran -lquadmath -lm
-```
 
