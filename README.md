@@ -151,6 +151,26 @@ Each simulation script sets the simulation setting internally. The scripts print
 
 Runtime depends on the sample size, the number of simulation replications, and the computing environment. The Goggins method is much more computationally intensive than other methods.
 
+### Simulation size and job-splitting settings
+
+Each simulation script contains user-adjustable settings controlling the sample size and the number of simulation replications.
+
+```r
+n <- 1000
+Num_INSTANCES <- 1000
+Instances_PER_JOB <- 10
+```
+
+Here, `n` is the sample size for each simulated dataset. `Num_INSTANCES` is the number of jobs or batches. `Instances_PER_JOB` is the number of simulation replications run within each job or batch. Therefore, the total number of simulation replications is
+
+```r
+Num_INSTANCES * Instances_PER_JOB
+```
+
+For example, if `Num_INSTANCES = 1000` and `Instances_PER_JOB = 10`, then the full simulation contains `1000 * 10 = 10,000` replications. This structure is useful for running simulations in batches on a computing cluster. For a smaller local test run, one can reduce either `Num_INSTANCES` or `Instances_PER_JOB`.
+
+To reproduce the simulation tables in the paper, use the values of `Num_INSTANCES`, and `Instances_PER_JOB` specified in the corresponding simulation scripts.
+
 ---
 
 ## Proposed Method
